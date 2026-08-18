@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Connecting Printful to WooCommerce: how it actually works</title>
+<meta name="description" content="What a Printful–WooCommerce integration does and does not do, the difference between product sync and order fulfilment, and how to judge a plugin before you install it.">
+<link rel="canonical" href="https://podsync.lifeinsight-365.com/printful-woocommerce-integration">
+<meta property="og:title" content="Connecting Printful to WooCommerce: how it actually works">
+<meta property="og:description" content="What a Printful–WooCommerce integration does and does not do, the difference between product sync and order fulfilment, and how to judge a plugin before you install it.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://podsync.lifeinsight-365.com/printful-woocommerce-integration">
+<style>
+:root { color-scheme: light dark; --fg:#1a1a1a; --bg:#fff; --dim:#666; --line:#e5e5e5; --accent:#0b57d0; }
+@media (prefers-color-scheme: dark) {
+  :root { --fg:#e8e8e8; --bg:#16171a; --dim:#9aa0a6; --line:#2c2e33; --accent:#8ab4f8; }
+}
+* { box-sizing: border-box; }
+body { max-width: 46rem; margin: 0 auto; padding: 3rem 1.25rem 6rem; background: var(--bg); color: var(--fg);
+       font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+h1 { font-size: 1.75rem; line-height: 1.3; font-weight: 650; letter-spacing: -.02em; margin: 0 0 .5rem; }
+h2 { font-size: 1.1rem; font-weight: 650; margin: 2.5rem 0 .6rem; letter-spacing: -.01em; }
+p, li { margin: .7rem 0; }
+ul, ol { padding-left: 1.3rem; }
+a { color: var(--accent); }
+code { font: 13.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+       background: color-mix(in srgb, var(--fg) 7%, transparent); padding: .1em .35em; border-radius: 4px; }
+pre { background: color-mix(in srgb, var(--fg) 6%, transparent); padding: .9rem 1rem; border-radius: 8px;
+      overflow-x: auto; }
+pre code { background: none; padding: 0; }
+.meta { color: var(--dim); font-size: .875rem; margin-bottom: 2.5rem; }
+.note { color: var(--dim); font-size: .93rem; border-left: 3px solid var(--line); padding-left: .9rem; }
+.disc { margin-top: 3.5rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 10px;
+        font-size: .93rem; }
+.disc h3 { font-size: .95rem; margin: 0 0 .5rem; font-weight: 650; }
+.disc ul { margin: .4rem 0 0; }
+nav.top { margin-bottom: 2.5rem; font-size: .875rem; }
+footer { margin-top: 4rem; padding-top: 1.2rem; border-top: 1px solid var(--line);
+         color: var(--dim); font-size: .875rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--line); padding: .5rem .7rem; text-align: left; vertical-align: top;
+         font-size: .95rem; }
+th { font-weight: 650; background: color-mix(in srgb, var(--fg) 4%, transparent); }
+.idx { list-style: none; padding: 0; }
+.idx li { margin: 1.1rem 0; }
+.idx a { font-weight: 600; text-decoration: none; }
+.idx span { display: block; color: var(--dim); font-size: .9rem; margin-top: .15rem; }
+</style>
+</head><body>
+<nav class="top"><a href="/">Printful + WooCommerce notes</a></nav>
+<h1>Connecting Printful to WooCommerce: how it actually works</h1>
+<p class="meta">Updated 18 August 2026</p>
+
+<p>"Integration" covers three separate jobs, and most trouble comes from assuming one plugin
+does all of them. Separate them first and the choice gets easy.</p>
+
+<h2>The three jobs</h2>
+<ol>
+  <li><b>Product sync</b> — Printful's catalogue of your designs is copied into WooCommerce as
+      products, with prices and availability kept current. One direction: Printful to your
+      shop.</li>
+  <li><b>Order routing</b> — when a customer pays on your shop, the order is sent to Printful
+      for printing and dispatch. The other direction, and the one that touches money.</li>
+  <li><b>Shipping rates</b> — the cart asks Printful what delivery costs before the customer
+      pays. Live, in the checkout, on a timer.</li>
+</ol>
+<p>You can run a shop with only the first if you pass orders to Printful yourself. Many small
+shops do exactly that for their first few months.</p>
+
+<h2>Why product sync is where things break</h2>
+<p>Printful's API changes, WordPress ships a major version, a security proxy in front of the
+site starts blocking outbound requests. Any of these stops a sync. The damaging part is
+rarely the failure itself — it is that an hourly background job fails quietly and nobody
+notices until a customer orders something that is out of stock.</p>
+<p>So when you judge a sync plugin, the question is not what it syncs. It is <b>what it does
+when the sync fails</b>.</p>
+
+<h2>A checklist before you install anything</h2>
+<ul>
+  <li><b>Does it tell you when a run fails?</b> A visible log beats a silent cron job.</li>
+  <li><b>Does it write partial products?</b> If Printful returns an incomplete item, half a
+      product in your catalogue is worse than no product.</li>
+  <li><b>Will it touch products it did not create?</b> Anything that can delete or overwrite
+      your own listings deserves a backup first.</li>
+  <li><b>Does it handle variants the way you sell?</b> If you sell sizes and colours you need
+      variable products, not one product per design.</li>
+  <li><b>When was it last updated?</b> Compare its "tested up to" against your WordPress
+      version.</li>
+</ul>
+
+<h2>The current options</h2>
+<p><a href="https://wordpress.org/plugins/printful-shipping-for-woocommerce/">Printful's own WooCommerce plugin</a> is the best known. As of 18 August 2026 the directory lists it at
+<b>50,000 active installs</b>, a <b>2.6 out of 5</b> rating from 96 reviews, a last update of
+<b>14 January 2026</b>, and compatibility tested to <b>WordPress 6.9.7</b>. Those are the
+directory's own figures — check them yourself before deciding, since they change.</p>
+<p>Beyond that the field is thin, which is why so many shops end up moving orders by hand.</p>
+
+<p class="note"><b>What ours does not do.</b> The free plugin copies simple products using the
+first variant, so it is not the answer if you sell one design in six sizes. It does not send
+orders to Printful and does not quote live shipping rates. It works with Printful only —
+not Printify or other providers.</p>
+<div class="disc">
+<h3>Disclosure</h3>
+<p>These notes are written by <b>sellerkit</b>. We build a Printful sync plugin for WooCommerce (below), which is why we know these failure modes.</p>
+<ul><li><b>PODSync for WooCommerce</b> — copies Printful products, prices and availability into WooCommerce, and tells you when a run fails <i>(currently in WordPress.org review)</i></li></ul>
+<p class="note">Everything above this box works whether or not you install anything.
+Where a workaround is enough, we say so.</p>
+</div>
+<footer>
+  <a href="/">All guides</a> &middot;
+  <a href="mailto:globalmatchhub@gmail.com">globalmatchhub@gmail.com</a>
+</footer></body></html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Choosing a print-on-demand plugin for WooCommerce</title>
+<meta name="description" content="How to compare print-on-demand plugins for WooCommerce on the things that matter: which provider, which of the three jobs it does, and what it does when it fails.">
+<link rel="canonical" href="https://podsync.lifeinsight-365.com/woocommerce-print-on-demand-plugin">
+<meta property="og:title" content="Choosing a print-on-demand plugin for WooCommerce">
+<meta property="og:description" content="How to compare print-on-demand plugins for WooCommerce on the things that matter: which provider, which of the three jobs it does, and what it does when it fails.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://podsync.lifeinsight-365.com/woocommerce-print-on-demand-plugin">
+<style>
+:root { color-scheme: light dark; --fg:#1a1a1a; --bg:#fff; --dim:#666; --line:#e5e5e5; --accent:#0b57d0; }
+@media (prefers-color-scheme: dark) {
+  :root { --fg:#e8e8e8; --bg:#16171a; --dim:#9aa0a6; --line:#2c2e33; --accent:#8ab4f8; }
+}
+* { box-sizing: border-box; }
+body { max-width: 46rem; margin: 0 auto; padding: 3rem 1.25rem 6rem; background: var(--bg); color: var(--fg);
+       font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+h1 { font-size: 1.75rem; line-height: 1.3; font-weight: 650; letter-spacing: -.02em; margin: 0 0 .5rem; }
+h2 { font-size: 1.1rem; font-weight: 650; margin: 2.5rem 0 .6rem; letter-spacing: -.01em; }
+p, li { margin: .7rem 0; }
+ul, ol { padding-left: 1.3rem; }
+a { color: var(--accent); }
+code { font: 13.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+       background: color-mix(in srgb, var(--fg) 7%, transparent); padding: .1em .35em; border-radius: 4px; }
+pre { background: color-mix(in srgb, var(--fg) 6%, transparent); padding: .9rem 1rem; border-radius: 8px;
+      overflow-x: auto; }
+pre code { background: none; padding: 0; }
+.meta { color: var(--dim); font-size: .875rem; margin-bottom: 2.5rem; }
+.note { color: var(--dim); font-size: .93rem; border-left: 3px solid var(--line); padding-left: .9rem; }
+.disc { margin-top: 3.5rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 10px;
+        font-size: .93rem; }
+.disc h3 { font-size: .95rem; margin: 0 0 .5rem; font-weight: 650; }
+.disc ul { margin: .4rem 0 0; }
+nav.top { margin-bottom: 2.5rem; font-size: .875rem; }
+footer { margin-top: 4rem; padding-top: 1.2rem; border-top: 1px solid var(--line);
+         color: var(--dim); font-size: .875rem; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--line); padding: .5rem .7rem; text-align: left; vertical-align: top;
+         font-size: .95rem; }
+th { font-weight: 650; background: color-mix(in srgb, var(--fg) 4%, transparent); }
+.idx { list-style: none; padding: 0; }
+.idx li { margin: 1.1rem 0; }
+.idx a { font-weight: 600; text-decoration: none; }
+.idx span { display: block; color: var(--dim); font-size: .9rem; margin-top: .15rem; }
+</style>
+</head><body>
+<nav class="top"><a href="/">Printful + WooCommerce notes</a></nav>
+<h1>Choosing a print-on-demand plugin for WooCommerce</h1>
+<p class="meta">Updated 18 August 2026</p>
+
+<p>Plugin lists rank by feature count. That is the wrong axis for print-on-demand, where the
+cost of a quiet failure is a refunded order. Three questions settle it faster.</p>
+
+<h2>1. Which provider are you actually on?</h2>
+<p>Print-on-demand plugins are provider-specific. A Printful plugin does not talk to Printify,
+Gelato or anyone else — the APIs, product catalogues and variant models are different.
+Pick your provider first; the plugin follows.</p>
+<p class="note">If you have not committed to a provider yet, do that before choosing a plugin.
+Switching providers later means redoing the integration, not swapping a setting.</p>
+
+<h2>2. Which of the three jobs do you need?</h2>
+<ul>
+  <li><b>Product sync</b> — designs into your catalogue, prices and stock current.</li>
+  <li><b>Order routing</b> — paid orders sent for fulfilment.</li>
+  <li><b>Live shipping rates</b> — real delivery costs quoted at checkout.</li>
+</ul>
+<p>You do not need all three on day one. Sync plus manual ordering is a legitimate way to
+start, and it removes the two highest-risk pieces while you have almost no orders.</p>
+
+<h2>3. What happens when it breaks?</h2>
+<p>This separates plugins more than anything on a feature table:</p>
+<ul>
+  <li>Does a failed run appear anywhere you will actually look?</li>
+  <li>Does a bad API response produce a half-written product, or a skip with a reason?</li>
+  <li>Can it modify products it did not create?</li>
+  <li>If it quotes shipping, what happens when the API is slow — does the cart wait, or fall
+      back to your own rate? A checkout that hangs costs more than a wrong rate.</li>
+</ul>
+
+<h2>Reading the directory listing honestly</h2>
+<p>Before installing, open the plugin's WordPress.org page and check three fields: <b>last
+updated</b>, <b>tested up to</b>, and the <b>rating distribution</b> rather than the average.
+A pile of one-star reviews all describing the same fault tells you more than the mean.</p>
+<p>For reference, on 18 August 2026 <a href="https://wordpress.org/plugins/printful-shipping-for-woocommerce/">Printful's own WooCommerce plugin</a> showed 50,000 active installs, 2.6 out of 5
+from 96 reviews, last updated 14 January 2026, tested to WordPress 6.9.7. Check the current
+figures yourself — that is the point of the exercise.</p>
+
+<h2>Variants deserve a special look</h2>
+<p>If you sell one design in several sizes or colours, you need <b>variable products</b>. Some
+plugins create a separate simple product per variant, or import only the first one. Both look
+fine on a demo store with one design and fall apart on a real catalogue.</p>
+
+<p class="note"><b>What ours does not do.</b> The free plugin copies simple products using the
+first variant, so it is not the answer if you sell one design in six sizes. It does not send
+orders to Printful and does not quote live shipping rates. It works with Printful only —
+not Printify or other providers.</p>
+<div class="disc">
+<h3>Disclosure</h3>
+<p>These notes are written by <b>sellerkit</b>. We build a Printful sync plugin for WooCommerce (below), which is why we know these failure modes.</p>
+<ul><li><b>PODSync for WooCommerce</b> — copies Printful products, prices and availability into WooCommerce, and tells you when a run fails <i>(currently in WordPress.org review)</i></li></ul>
+<p class="note">Everything above this box works whether or not you install anything.
+Where a workaround is enough, we say so.</p>
+</div>
+<footer>
+  <a href="/">All guides</a> &middot;
+  <a href="mailto:globalmatchhub@gmail.com">globalmatchhub@gmail.com</a>
+</footer></body></html>
