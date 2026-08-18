@@ -2,13 +2,13 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Printful + WooCommerce notes — Printful and WooCommerce</title>
-<meta name="description" content="Practical notes on connecting Printful to WooCommerce: how the sync works, what to do when products stop updating, shipping rates, and how to pick a plugin.">
-<link rel="canonical" href="https://podsync.lifeinsight-365.com/">
-<meta property="og:title" content="Printful + WooCommerce notes — Printful and WooCommerce">
-<meta property="og:description" content="Practical notes on connecting Printful to WooCommerce: how the sync works, what to do when products stop updating, shipping rates, and how to pick a plugin.">
+<title>PODSync Pro — variations and order routing for Printful on WooCommerce</title>
+<meta name="description" content="What PODSync Pro adds over the free plugin: real WooCommerce variations for every size and colour, and paid orders sent to Printful as drafts. $39 a year for one shop.">
+<link rel="canonical" href="https://podsync.lifeinsight-365.com/podsync-pro">
+<meta property="og:title" content="PODSync Pro — variations and order routing for Printful on WooCommerce">
+<meta property="og:description" content="What PODSync Pro adds over the free plugin: real WooCommerce variations for every size and colour, and paid orders sent to Printful as drafts. $39 a year for one shop.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://podsync.lifeinsight-365.com/">
+<meta property="og:url" content="https://podsync.lifeinsight-365.com/podsync-pro">
 <style>
 :root { color-scheme: light dark; --fg:#1a1a1a; --bg:#fff; --dim:#666; --line:#e5e5e5; --accent:#0b57d0; }
 @media (prefers-color-scheme: dark) {
@@ -53,19 +53,30 @@ th { font-weight: 650; background: color-mix(in srgb, var(--fg) 4%, transparent)
 .idx span { display: block; color: var(--dim); font-size: .9rem; margin-top: .15rem; }
 </style>
 </head><body>
-<h1>Printful + WooCommerce notes</h1>
-<p class="meta">Practical notes on running Printful behind a WooCommerce shop — how the sync actually works, and what to check when it stops.</p>
-<ul class="idx"><li><a href="/printful-woocommerce-integration">Connecting Printful to WooCommerce: how it actually works</a><span>What a Printful–WooCommerce integration does and does not do, the difference between product sync and order fulfilment, and how to judge a plugin before you install it.</span></li><li><a href="/printful-woocommerce-setup">Printful and WooCommerce setup, in order</a><span>The setup order that avoids the common mistakes: currency first, then the access token, then a first sync into drafts rather than straight into your live shop.</span></li><li><a href="/printful-not-syncing">Printful not syncing to WooCommerce: what to check</a><span>The four causes behind a Printful sync that silently stops — expired token, blocked outbound requests, a broken scheduler, and partial API responses — and how to tell them apart.</span></li><li><a href="/woocommerce-print-on-demand-plugin">Choosing a print-on-demand plugin for WooCommerce</a><span>How to compare print-on-demand plugins for WooCommerce on the things that matter: which provider, which of the three jobs it does, and what it does when it fails.</span></li><li><a href="/printful-woocommerce-shipping">Printful shipping rates in WooCommerce: live rates or flat rate?</a><span>The trade-off between live Printful shipping rates and WooCommerce flat rates, why live rates can empty a cart, and how to set flat rates that do not lose money.</span></li></ul>
-<div class="disc">
-<h3>Who writes this</h3>
-<p>These notes are written by <b>sellerkit</b>. We build a Printful sync plugin for WooCommerce (below), which is why we know these failure modes.</p>
-<ul><li><b>PODSync for WooCommerce</b> — copies Printful products, prices and availability into WooCommerce, and tells you when a run fails <i>(currently in WordPress.org review)</i></li></ul>
-</div>
-<div class="pro">
-<h3>PODSync Pro</h3>
+<nav class="top"><a href="/">Printful + WooCommerce notes</a></nav>
+<h1>PODSync Pro</h1>
+<p class="meta">Updated 18 August 2026</p>
+
+<h2>What the free plugin already does</h2>
+<p>Products, prices and availability copied from Printful. Simple products and the first variant. Hourly and on-demand sync, with a plain-language log.</p>
 <p class="note">Pro is a separate plugin that sits on top of the free one. It adds work the free plugin does not do; it never switches anything off. If the free sync is all you need, use the free one.</p>
-<p>It adds:</p><ul><li>Every size and colour becomes a real WooCommerce variation, each with its own price, code and stock</li><li>Paid orders sent to Printful — held for your approval by default, and they arrive there as drafts, so nothing goes into production until you confirm it</li></ul>
+
+<h2>What Pro adds</h2>
+<ul><li>Every size and colour becomes a real WooCommerce variation, each with its own price, code and stock</li><li>Paid orders sent to Printful — held for your approval by default, and they arrive there as drafts, so nothing goes into production until you confirm it</li></ul>
+
+<h2>Price</h2>
 <ul class="buy"><li><a href="https://buy.polar.sh/polar_cl_tXbBh2l3TZdATtFcNAoVKIg0yPyjmm5PD50SH13IpVA">One shop<span>$39 / year</span></a></li><li><a href="https://buy.polar.sh/polar_cl_Y0TEOJ852VCxVdr0bTMlwBxQPZ7djBbav4Py70CV0bT">Five shops<span>$89 / year</span></a></li></ul>
-<p class="note">Questions before buying? <a href="mailto:support@podsync.lifeinsight-365.com">support@podsync.lifeinsight-365.com</a></p>
-</div>
-<footer><a href="mailto:globalmatchhub@gmail.com">globalmatchhub@gmail.com</a></footer></body></html>
+<p class="note">A licence covers updates and support for a year. The plugin keeps
+working when it lapses — only updates and support stop. One shop per licence,
+five for the larger one; you can move a shop from your Polar customer portal.</p>
+
+<h2>Before you buy</h2>
+<p>Install the free plugin first and let one sync run. If it copies your products
+the way you expect, Pro will too — it uses the same code underneath. If the free
+sync has trouble on your shop, tell us before paying:
+<a href="mailto:support@podsync.lifeinsight-365.com">support@podsync.lifeinsight-365.com</a>.</p>
+
+<footer>
+  <a href="/">All guides</a> &middot;
+  <a href="mailto:support@podsync.lifeinsight-365.com">support@podsync.lifeinsight-365.com</a>
+</footer></body></html>
