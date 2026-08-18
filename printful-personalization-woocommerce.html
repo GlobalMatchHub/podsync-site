@@ -2,13 +2,13 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Printful + WooCommerce notes — Printful and WooCommerce</title>
-<meta name="description" content="Practical notes on connecting Printful to WooCommerce: how the sync works, what to do when products stop updating, shipping rates, and how to pick a plugin.">
-<link rel="canonical" href="https://podsync.lifeinsight-365.com/">
-<meta property="og:title" content="Printful + WooCommerce notes — Printful and WooCommerce">
-<meta property="og:description" content="Practical notes on connecting Printful to WooCommerce: how the sync works, what to do when products stop updating, shipping rates, and how to pick a plugin.">
+<title>Can customers personalise Printful products on WooCommerce?</title>
+<meta name="description" content="What personalisation actually requires with Printful and WooCommerce, which part of it a sync plugin cannot do, and the three routes that work today.">
+<link rel="canonical" href="https://podsync.lifeinsight-365.com/printful-personalization-woocommerce">
+<meta property="og:title" content="Can customers personalise Printful products on WooCommerce?">
+<meta property="og:description" content="What personalisation actually requires with Printful and WooCommerce, which part of it a sync plugin cannot do, and the three routes that work today.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://podsync.lifeinsight-365.com/">
+<meta property="og:url" content="https://podsync.lifeinsight-365.com/printful-personalization-woocommerce">
 <style>
 :root { color-scheme: light dark; --fg:#1a1a1a; --bg:#fff; --dim:#666; --line:#e5e5e5; --accent:#0b57d0; }
 @media (prefers-color-scheme: dark) {
@@ -53,19 +53,69 @@ th { font-weight: 650; background: color-mix(in srgb, var(--fg) 4%, transparent)
 .idx span { display: block; color: var(--dim); font-size: .9rem; margin-top: .15rem; }
 </style>
 </head><body>
-<h1>Printful + WooCommerce notes</h1>
-<p class="meta">Practical notes on running Printful behind a WooCommerce shop — how the sync actually works, and what to check when it stops.</p>
-<ul class="idx"><li><a href="/printful-woocommerce-integration">Connecting Printful to WooCommerce: how it actually works</a><span>What a Printful–WooCommerce integration does and does not do, the difference between product sync and order fulfilment, and how to judge a plugin before you install it.</span></li><li><a href="/printful-woocommerce-setup">Printful and WooCommerce setup, in order</a><span>The setup order that avoids the common mistakes: currency first, then the access token, then a first sync into drafts rather than straight into your live shop.</span></li><li><a href="/printful-not-syncing">Printful not syncing to WooCommerce: what to check</a><span>The four causes behind a Printful sync that silently stops — expired token, blocked outbound requests, a broken scheduler, and partial API responses — and how to tell them apart.</span></li><li><a href="/woocommerce-print-on-demand-plugin">Choosing a print-on-demand plugin for WooCommerce</a><span>How to compare print-on-demand plugins for WooCommerce on the things that matter: which provider, which of the three jobs it does, and what it does when it fails.</span></li><li><a href="/printful-personalization-woocommerce">Can customers personalise Printful products on WooCommerce?</a><span>What personalisation actually requires with Printful and WooCommerce, which part of it a sync plugin cannot do, and the three routes that work today.</span></li><li><a href="/printful-woocommerce-shipping">Printful shipping rates in WooCommerce: live rates or flat rate?</a><span>The trade-off between live Printful shipping rates and WooCommerce flat rates, why live rates can empty a cart, and how to set flat rates that do not lose money.</span></li></ul>
+<nav class="top"><a href="/">Printful + WooCommerce notes</a></nav>
+<h1>Can customers personalise Printful products on WooCommerce?</h1>
+<p class="meta">Updated 18 August 2026</p>
+
+<p>Short answer: yes, but not through a sync plugin. Personalisation and syncing are two
+different jobs, and mixing them up is where most of the frustration comes from.</p>
+
+<h2>Why a sync plugin cannot do it</h2>
+<p>A sync plugin copies products that <b>already exist</b> in Printful into your shop. The
+design is fixed before the product ever reaches WooCommerce.</p>
+<p>Personalisation is the opposite: the artwork does not exist until a shopper types a name
+or uploads a photo. Something has to take that input, turn it into a print file, and attach
+it to that one order. That is a design tool plus an order pipeline — not a catalogue copy.</p>
+<p class="note">So "does your sync plugin support personalisation?" almost always has the
+same answer, from any of them: no, and it is not a gap they can quietly fill.</p>
+
+<h2>Three routes that work today</h2>
+
+<h3>1. Printful's own product designer, embedded</h3>
+<p>Printful provides an embedded designer you can place on your site. The shopper personalises
+there, and the order arrives at Printful already carrying the right file.</p>
+<p>Best fit when personalisation <b>is</b> the product — names on mugs, dates on prints. The
+trade-off is that a chunk of your product page is now someone else's interface.</p>
+
+<h3>2. A WooCommerce product-options plugin plus manual artwork</h3>
+<p>Add a text field to the product with any options plugin, take the order, then create the
+print file yourself and place it in Printful by hand.</p>
+<p>Slow, and it does not scale past a handful a day — but it costs nothing to try, and it tells
+you whether people actually want the option before you build anything.</p>
+
+<h3>3. A dedicated personalisation plugin with a Printful pipeline</h3>
+<p>Some product-customiser plugins generate the print file and push it through Printful's API.
+This is the only route that is both automatic and personalised.</p>
+<p>Check two things before buying: does it generate a file at <b>print resolution</b>, and what
+happens to an order when file generation fails? A blurry print or a silently dropped order both
+cost you the customer.</p>
+
+<h2>What to decide first</h2>
+<ol>
+  <li>Is personalisation the product, or a nice extra on a few items?</li>
+  <li>If it is an extra, start with route 2 and measure. Most shops discover the demand is
+      smaller than expected.</li>
+  <li>Only automate once the manual version is genuinely tedious. That is a good problem.</li>
+</ol>
+<p class="note">Whatever you choose for personalisation, your ordinary catalogue still has to
+stay in step with Printful — prices change, items get discontinued. The two jobs sit side by
+side; neither replaces the other.</p>
+
 <div class="disc">
-<h3>Who writes this</h3>
+<h3>Disclosure</h3>
 <p>These notes are written by <b>sellerkit</b>. We build a Printful sync plugin for WooCommerce (below), which is why we know these failure modes.</p>
 <ul><li><b>PODSync for WooCommerce</b> — copies Printful products, prices and availability into WooCommerce, and tells you when a run fails <i>(currently in WordPress.org review)</i></li></ul>
+<p class="note">Everything above this box works whether or not you install anything.
+Where a workaround is enough, we say so.</p>
 </div>
 <div class="pro">
 <h3>PODSync Pro</h3>
 <p class="note">Pro is a separate plugin that sits on top of the free one. It adds work the free plugin does not do; it never switches anything off. If the free sync is all you need, use the free one.</p>
-<p>It adds:</p><ul><li>Every size and colour becomes a real WooCommerce variation, each with its own price, code and stock</li><li>Paid orders sent to Printful — held for your approval by default, and they arrive there as drafts, so nothing goes into production until you confirm it</li><li>Live shipping rates at checkout, off until you switch them on. If Printful is slow or unsure, no rate is added and your own shipping methods are used — the cart is never held up</li></ul>
+
 <ul class="buy"><li><a href="https://buy.polar.sh/polar_cl_tXbBh2l3TZdATtFcNAoVKIg0yPyjmm5PD50SH13IpVA">One shop<span>$39 / year</span></a></li><li><a href="https://buy.polar.sh/polar_cl_Y0TEOJ852VCxVdr0bTMlwBxQPZ7djBbav4Py70CV0bT">Five shops<span>$89 / year</span></a></li></ul>
 <p class="note">Questions before buying? <a href="mailto:support@podsync.lifeinsight-365.com">support@podsync.lifeinsight-365.com</a></p>
 </div>
-<footer><a href="mailto:globalmatchhub@gmail.com">globalmatchhub@gmail.com</a></footer></body></html>
+<footer>
+  <a href="/">All guides</a> &middot;
+  <a href="mailto:globalmatchhub@gmail.com">globalmatchhub@gmail.com</a>
+</footer></body></html>
