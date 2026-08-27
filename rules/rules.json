@@ -1,0 +1,1233 @@
+{
+  "schema_version": 1,
+  "rules_version": "2026-08-25.7",
+  "min_plugin_version": "0.1.0",
+  "operators_allowed": [
+    "contains",
+    "count_gt",
+    "count_lt",
+    "empty",
+    "eq",
+    "formula_start",
+    "gt",
+    "gt_other",
+    "gtin_checksum",
+    "gtin_length",
+    "has_html",
+    "image_min_edge",
+    "intersects",
+    "lacks_other",
+    "not_contains",
+    "not_empty",
+    "not_in",
+    "not_intersects",
+    "not_positive",
+    "shorter_than"
+  ],
+  "sources": {
+    "title": "post:post_title",
+    "description": "post:post_content",
+    "status": "post:post_status",
+    "gtin": "meta:_global_unique_id",
+    "price": "meta:_price",
+    "manage_stock": "meta:_manage_stock",
+    "stock_status": "meta:_stock_status",
+    "thumbnail": "meta:_thumbnail_id",
+    "thumbnail_size": "image:_thumbnail_id",
+    "gallery": "meta:_product_image_gallery",
+    "brand": "tax:product_brand",
+    "category": "tax:product_cat",
+    "privacy_page": "option:wp_page_for_privacy_policy",
+    "terms_page": "option:woocommerce_terms_page_id",
+    "sale_price": "meta:_sale_price",
+    "regular_price": "meta:_regular_price",
+    "condition": "meta:_aifeed_condition",
+    "currency": "option:woocommerce_currency",
+    "blog_public": "option:blog_public",
+    "return_page": "option:aifeed_return_policy_page",
+    "return_days": "option:aifeed_return_window_days",
+    "default_condition": "option:aifeed_default_condition",
+    "ship_countries": "derived:shipping_countries",
+    "shop_categories": "derived:shop_taxonomy_words",
+    "unmapped_cats": "derived:unmapped_category_count",
+    "product_type": "derived:product_type",
+    "variation_attrs": "derived:variation_attributes",
+    "parent_id": "derived:parent_id",
+    "dims_complete": "derived:dimensions_complete",
+    "prohibited": "derived:taxonomy_words",
+    "intangible": "derived:is_intangible",
+    "product_link": "derived:permalink",
+    "image_url": "derived:image_url",
+    "gallery_urls": "derived:gallery_urls",
+    "shopping_cat": "derived:shopping_category",
+    "variant_color": "derived:variant_color",
+    "variant_size": "derived:variant_size",
+    "dimensions": "derived:dimensions_text",
+    "availability": "derived:availability",
+    "product_id": "product_id",
+    "stock_qty": "meta:_stock",
+    "weight": "meta:_weight",
+    "sku": "meta:_sku"
+  },
+  "checks": [
+    {
+      "id": "S01_privacy_page_missing",
+      "scope": "shop",
+      "severity": "shop_blocker",
+      "channels": [
+        "openai"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "privacy_page"
+      },
+      "default_message": "No privacy policy page is set. ChatGPT requires seller_privacy_policy.",
+      "default_fix": "Settings > Privacy, pick or create a privacy policy page."
+    },
+    {
+      "id": "S02_terms_page_missing",
+      "scope": "shop",
+      "severity": "shop_blocker",
+      "channels": [
+        "openai"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "terms_page"
+      },
+      "default_message": "No terms page is set. ChatGPT requires seller_tos.",
+      "default_fix": "WooCommerce > Settings > Advanced, set the Terms and conditions page."
+    },
+    {
+      "id": "P01_gtin_missing",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "gtin"
+      },
+      "default_message": "No GTIN. Products without one are hard for AI shopping to match.",
+      "default_fix": "Add the GTIN, UPC, EAN or ISBN from the packaging."
+    },
+    {
+      "id": "P02_gtin_checksum",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "gtin_checksum",
+        "source": "gtin"
+      },
+      "default_message": "GTIN check digit is wrong. The code exists but can never match.",
+      "default_fix": "Re-enter the GTIN. Its last digit is a checksum over the others."
+    },
+    {
+      "id": "P03_gtin_length",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "gtin_length",
+        "source": "gtin"
+      },
+      "default_message": "GTIN is not 8, 12, 13 or 14 digits, so it is not a GTIN.",
+      "default_fix": "Check for a missing or extra digit."
+    },
+    {
+      "id": "P04_brand_missing",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "brand"
+      },
+      "default_message": "No brand set.",
+      "default_fix": "Assign a brand to this product."
+    },
+    {
+      "id": "P07_description_short",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity"
+      ],
+      "when": {
+        "op": "shorter_than",
+        "source": "description",
+        "value": 200
+      },
+      "default_message": "Description is very short. AI shopping ranks thin descriptions poorly.",
+      "default_fix": "Write at least a few hundred characters of plain description."
+    },
+    {
+      "id": "P09_description_html",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai"
+      ],
+      "when": {
+        "op": "has_html",
+        "source": "description"
+      },
+      "default_message": "Description is written in HTML. It is sent as plain text, which can read oddly.",
+      "default_fix": "Check how it reads without formatting. Lists and tables lose their shape."
+    },
+    {
+      "id": "P10_thumbnail_missing",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "thumbnail"
+      },
+      "default_message": "No main image.",
+      "default_fix": "Set a product image."
+    },
+    {
+      "id": "P11_gallery_thin",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "perplexity"
+      ],
+      "when": {
+        "op": "count_lt",
+        "source": "gallery",
+        "value": 4
+      },
+      "default_message": "Fewer than 5 images in total. Perplexity favours richer galleries.",
+      "default_fix": "Add more product photos."
+    },
+    {
+      "id": "P12_image_small",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "image_min_edge",
+        "source": "thumbnail_size",
+        "value": 800
+      },
+      "default_message": "Main image is smaller than 800px on its short edge.",
+      "default_fix": "Upload a larger photo."
+    },
+    {
+      "id": "P13_price_missing",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "price"
+      },
+      "default_message": "No price.",
+      "default_fix": "Set a regular price."
+    },
+    {
+      "id": "P15_stock_qty_unavailable",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai"
+      ],
+      "when": {
+        "op": "not_in",
+        "source": "manage_stock",
+        "values": [
+          "yes"
+        ]
+      },
+      "default_message": "Stock quantity is not tracked, so inventory_quantity cannot be sent.",
+      "default_fix": "Turn on stock management for this product."
+    },
+    {
+      "id": "P17_category_missing",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "category"
+      },
+      "default_message": "No product category.",
+      "default_fix": "Assign a category so it can be mapped to the shopping taxonomy."
+    },
+    {
+      "id": "P21_not_public",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "not_in",
+        "source": "status",
+        "values": [
+          "publish"
+        ]
+      },
+      "default_message": "Product page is not public, so it cannot be listed.",
+      "default_fix": "Publish the product or leave it out of the feed."
+    },
+    {
+      "id": "S03_return_page_missing",
+      "scope": "shop",
+      "severity": "shop_blocker",
+      "channels": [
+        "openai"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "return_page"
+      },
+      "default_message": "No return policy page is set. ChatGPT requires a link to it.",
+      "default_fix": "Pick the page that states your return policy in this plugin's settings."
+    },
+    {
+      "id": "S04_return_days_missing",
+      "scope": "shop",
+      "severity": "shop_blocker",
+      "channels": [
+        "openai"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "return_days"
+      },
+      "default_message": "No return window in days. WooCommerce has no field for this, so it must be set here.",
+      "default_fix": "Enter the number of days a customer has to return an order."
+    },
+    {
+      "id": "S05_currency_unsupported",
+      "scope": "shop",
+      "severity": "shop_blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "not_in",
+        "source": "currency",
+        "values": [
+          "USD",
+          "EUR",
+          "GBP",
+          "CAD",
+          "AUD",
+          "JPY",
+          "CHF",
+          "SEK",
+          "NOK",
+          "DKK",
+          "PLN",
+          "CZK",
+          "MXN",
+          "BRL",
+          "INR",
+          "SGD",
+          "HKD",
+          "NZD"
+        ]
+      },
+      "default_message": "Your shop currency is not one the shopping channels accept.",
+      "default_fix": "These channels settle in a limited set of currencies. Selling in another one means the feed cannot be listed."
+    },
+    {
+      "id": "S06_no_us_shipping",
+      "scope": "shop",
+      "severity": "shop_blocker",
+      "channels": [
+        "perplexity"
+      ],
+      "when": {
+        "op": "not_contains",
+        "source": "ship_countries",
+        "value": "US"
+      },
+      "default_message": "You do not ship to the United States. Perplexity's merchant program requires it.",
+      "default_fix": "Add a US shipping zone, or leave Perplexity switched off."
+    },
+    {
+      "id": "S07_prohibited_categories",
+      "scope": "shop",
+      "severity": "shop_blocker",
+      "channels": [
+        "openai"
+      ],
+      "when": {
+        "op": "intersects",
+        "source": "shop_categories",
+        "values": [
+          "adult",
+          "porn",
+          "nsfw",
+          "alcohol",
+          "wine",
+          "beer",
+          "spirits",
+          "whisky",
+          "whiskey",
+          "vodka",
+          "tobacco",
+          "cigarette",
+          "vape",
+          "nicotine",
+          "gambling",
+          "casino",
+          "lottery",
+          "betting",
+          "weapon",
+          "weapons",
+          "firearm",
+          "gun",
+          "ammunition",
+          "ammo",
+          "knife-combat",
+          "prescription",
+          "pharmacy",
+          "medication",
+          "drug",
+          "supplement-rx",
+          "loan",
+          "insurance",
+          "securities",
+          "crypto-investment"
+        ]
+      },
+      "default_message": "Your shop sells in a category the channel refuses outright.",
+      "default_fix": "Alcohol, weapons, gambling, prescription medication and similar cannot be listed. Exclude those products."
+    },
+    {
+      "id": "S08_categories_unmapped",
+      "scope": "shop",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "gt",
+        "source": "unmapped_cats",
+        "value": 0
+      },
+      "default_message": "Some shop categories are not mapped to a shopping taxonomy.",
+      "default_fix": "Map each category once. Unmapped products are matched by guesswork."
+    },
+    {
+      "id": "S09_site_discourages_search",
+      "scope": "shop",
+      "severity": "shop_blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "eq",
+        "source": "blog_public",
+        "value": "0"
+      },
+      "default_message": "WordPress is set to discourage search engines. Nothing will be indexed or fetched.",
+      "default_fix": "Settings > Reading, untick 'Discourage search engines'."
+    },
+    {
+      "id": "P05_title_short",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "shorter_than",
+        "source": "title",
+        "value": 20
+      },
+      "default_message": "Title is very short. Generic titles match poorly.",
+      "default_fix": "Say what the thing is, not just its nickname."
+    },
+    {
+      "id": "P06_title_lacks_brand",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "perplexity"
+      ],
+      "when": {
+        "op": "lacks_other",
+        "source": "title",
+        "other": "brand"
+      },
+      "default_message": "The title does not mention the brand.",
+      "default_fix": "Put the brand at the front of the title."
+    },
+    {
+      "id": "P08_description_empty",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "description"
+      },
+      "default_message": "No description at all.",
+      "default_fix": "Write one. A product with no description cannot be listed."
+    },
+    {
+      "id": "P14_sale_above_regular",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "gt_other",
+        "source": "sale_price",
+        "other": "regular_price"
+      },
+      "default_message": "The sale price is higher than the regular price. Channels reject this outright.",
+      "default_fix": "Check the two price fields have not been swapped."
+    },
+    {
+      "id": "P16_stock_status_missing",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "empty",
+        "source": "stock_status"
+      },
+      "default_message": "No stock status, so availability cannot be sent.",
+      "default_fix": "Set the product to in stock or out of stock."
+    },
+    {
+      "id": "P18_variation_attrs_missing",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "only_if": {
+        "op": "eq",
+        "source": "product_type",
+        "value": "variable"
+      },
+      "when": {
+        "op": "not_intersects",
+        "source": "variation_attrs",
+        "values": [
+          "color",
+          "colour",
+          "size"
+        ]
+      },
+      "default_message": "This variable product has no colour or size attribute, so its variants cannot be told apart.",
+      "default_fix": "Give the variations a colour or size attribute."
+    },
+    {
+      "id": "P19_variation_orphan",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "only_if": {
+        "op": "eq",
+        "source": "product_type",
+        "value": "variation"
+      },
+      "when": {
+        "op": "empty",
+        "source": "parent_id"
+      },
+      "default_message": "This variation has no parent, so it cannot be grouped.",
+      "default_fix": "A variation without a parent is broken data. Re-save the parent product."
+    },
+    {
+      "id": "P20_dimensions_incomplete",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai"
+      ],
+      "only_if": {
+        "op": "not_in",
+        "source": "intangible",
+        "values": [
+          "yes"
+        ]
+      },
+      "when": {
+        "op": "eq",
+        "source": "dims_complete",
+        "value": "no"
+      },
+      "default_message": "Weight or dimensions are missing, so delivery cannot be estimated.",
+      "default_fix": "Fill in weight, length, width and height."
+    },
+    {
+      "id": "P22_prohibited_product",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai"
+      ],
+      "when": {
+        "op": "intersects",
+        "source": "prohibited",
+        "values": [
+          "adult",
+          "porn",
+          "nsfw",
+          "alcohol",
+          "wine",
+          "beer",
+          "spirits",
+          "whisky",
+          "whiskey",
+          "vodka",
+          "tobacco",
+          "cigarette",
+          "vape",
+          "nicotine",
+          "gambling",
+          "casino",
+          "lottery",
+          "betting",
+          "weapon",
+          "weapons",
+          "firearm",
+          "gun",
+          "ammunition",
+          "ammo",
+          "knife-combat",
+          "prescription",
+          "pharmacy",
+          "medication",
+          "drug",
+          "supplement-rx",
+          "loan",
+          "insurance",
+          "securities",
+          "crypto-investment"
+        ]
+      },
+      "default_message": "This product looks like a category the channel refuses outright.",
+      "default_fix": "Alcohol, weapons, gambling, tobacco, prescription medication and financial products cannot be listed. Exclude it from the feed."
+    },
+    {
+      "id": "P23_intangible",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "perplexity"
+      ],
+      "when": {
+        "op": "eq",
+        "source": "intangible",
+        "value": "yes"
+      },
+      "default_message": "Perplexity lists physical goods only. Downloads and services are out of scope.",
+      "default_fix": "Exclude this product from the Perplexity feed."
+    },
+    {
+      "id": "P24_condition_missing",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "only_if": {
+        "op": "empty",
+        "source": "default_condition"
+      },
+      "when": {
+        "op": "empty",
+        "source": "condition"
+      },
+      "default_message": "No condition set, and no shop default to fall back on.",
+      "default_fix": "Set a shop default of new, or set the condition on this product."
+    },
+    {
+      "id": "P25_price_not_positive",
+      "scope": "product",
+      "severity": "blocker",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "not_positive",
+        "source": "regular_price"
+      },
+      "default_message": "The price is zero or below, which no channel will accept.",
+      "default_fix": "Set a real regular price."
+    },
+    {
+      "id": "P26_title_formula",
+      "scope": "product",
+      "severity": "degraded",
+      "channels": [
+        "openai",
+        "perplexity",
+        "google"
+      ],
+      "when": {
+        "op": "formula_start",
+        "source": "title"
+      },
+      "default_message": "The title starts with =, +, - or @, which a spreadsheet treats as a formula.",
+      "default_fix": "Start the title with a letter. Anyone opening the feed in a spreadsheet would otherwise run whatever this says."
+    }
+  ],
+  "channels": {
+    "openai": {
+      "label": "ChatGPT",
+      "enabled": true,
+      "transport": {
+        "kind": "push",
+        "formats": [
+          "jsonl.gz",
+          "csv.gz"
+        ],
+        "full_feed_only": true,
+        "min_interval_minutes": 15
+      },
+      "fields": [
+        {
+          "name": "id",
+          "source": "product_id"
+        },
+        {
+          "name": "title",
+          "source": "title",
+          "transform": [
+            [
+              "strip_html"
+            ],
+            [
+              "collapse_space"
+            ],
+            [
+              "truncate",
+              150
+            ]
+          ]
+        },
+        {
+          "name": "description",
+          "source": "description",
+          "transform": [
+            [
+              "strip_html"
+            ],
+            [
+              "collapse_space"
+            ],
+            [
+              "truncate",
+              5000
+            ]
+          ]
+        },
+        {
+          "name": "link",
+          "source": "product_link"
+        },
+        {
+          "name": "image_link",
+          "source": "image_url"
+        },
+        {
+          "name": "additional_image_link",
+          "source": "gallery_urls"
+        },
+        {
+          "name": "price",
+          "source": "regular_price",
+          "transform": [
+            [
+              "money"
+            ]
+          ]
+        },
+        {
+          "name": "sale_price",
+          "source": "sale_price",
+          "transform": [
+            [
+              "money"
+            ]
+          ]
+        },
+        {
+          "name": "availability",
+          "source": "availability"
+        },
+        {
+          "name": "inventory_quantity",
+          "source": "stock_qty",
+          "transform": [
+            [
+              "number"
+            ]
+          ]
+        },
+        {
+          "name": "brand",
+          "source": "brand",
+          "transform": [
+            [
+              "first"
+            ]
+          ]
+        },
+        {
+          "name": "gtin",
+          "source": "gtin"
+        },
+        {
+          "name": "condition",
+          "source": "condition",
+          "transform": [
+            [
+              "default",
+              "new"
+            ]
+          ]
+        },
+        {
+          "name": "item_group_id",
+          "source": "parent_id"
+        },
+        {
+          "name": "weight",
+          "source": "weight"
+        },
+        {
+          "name": "dimensions",
+          "source": "dimensions"
+        },
+        {
+          "name": "enable_search",
+          "const": true
+        },
+        {
+          "name": "enable_checkout",
+          "const": false
+        },
+        {
+          "name": "return_policy",
+          "source": "return_page",
+          "transform": [
+            [
+              "page_url"
+            ]
+          ]
+        },
+        {
+          "name": "return_window",
+          "source": "return_days",
+          "transform": [
+            [
+              "number"
+            ]
+          ]
+        },
+        {
+          "name": "seller_privacy_policy",
+          "source": "privacy_page",
+          "transform": [
+            [
+              "page_url"
+            ]
+          ]
+        },
+        {
+          "name": "seller_tos",
+          "source": "terms_page",
+          "transform": [
+            [
+              "page_url"
+            ]
+          ]
+        }
+      ],
+      "format": "jsonl"
+    },
+    "perplexity": {
+      "label": "Perplexity",
+      "enabled": true,
+      "transport": {
+        "kind": "feed_url",
+        "formats": [
+          "csv",
+          "xml"
+        ]
+      },
+      "excludes": {
+        "virtual": true,
+        "downloadable": true
+      },
+      "fields": [
+        {
+          "name": "id",
+          "source": "product_id"
+        },
+        {
+          "name": "title",
+          "source": "title",
+          "transform": [
+            [
+              "strip_html"
+            ],
+            [
+              "collapse_space"
+            ],
+            [
+              "truncate",
+              150
+            ]
+          ]
+        },
+        {
+          "name": "description",
+          "source": "description",
+          "transform": [
+            [
+              "strip_html"
+            ],
+            [
+              "collapse_space"
+            ],
+            [
+              "truncate",
+              5000
+            ]
+          ]
+        },
+        {
+          "name": "link",
+          "source": "product_link"
+        },
+        {
+          "name": "image_link",
+          "source": "image_url"
+        },
+        {
+          "name": "additional_image_link",
+          "source": "gallery_urls",
+          "transform": [
+            [
+              "join",
+              ","
+            ]
+          ]
+        },
+        {
+          "name": "availability",
+          "source": "availability"
+        },
+        {
+          "name": "price",
+          "source": "regular_price",
+          "transform": [
+            [
+              "money"
+            ]
+          ]
+        },
+        {
+          "name": "sale_price",
+          "source": "sale_price",
+          "transform": [
+            [
+              "money"
+            ]
+          ]
+        },
+        {
+          "name": "brand",
+          "source": "brand",
+          "transform": [
+            [
+              "first"
+            ]
+          ]
+        },
+        {
+          "name": "gtin",
+          "source": "gtin"
+        },
+        {
+          "name": "mpn",
+          "source": "sku"
+        },
+        {
+          "name": "condition",
+          "source": "condition",
+          "transform": [
+            [
+              "default",
+              "new"
+            ]
+          ]
+        },
+        {
+          "name": "google_product_category",
+          "source": "shopping_cat"
+        },
+        {
+          "name": "item_group_id",
+          "source": "parent_id"
+        },
+        {
+          "name": "color",
+          "source": "variant_color"
+        },
+        {
+          "name": "size",
+          "source": "variant_size"
+        }
+      ],
+      "format": "csv"
+    },
+    "google": {
+      "label": "Google",
+      "enabled": true,
+      "transport": {
+        "kind": "feed_url",
+        "formats": [
+          "xml",
+          "csv"
+        ]
+      },
+      "fields": [
+        {
+          "name": "id",
+          "source": "product_id"
+        },
+        {
+          "name": "title",
+          "source": "title",
+          "transform": [
+            [
+              "strip_html"
+            ],
+            [
+              "collapse_space"
+            ],
+            [
+              "truncate",
+              150
+            ]
+          ]
+        },
+        {
+          "name": "description",
+          "source": "description",
+          "transform": [
+            [
+              "strip_html"
+            ],
+            [
+              "collapse_space"
+            ],
+            [
+              "truncate",
+              5000
+            ]
+          ]
+        },
+        {
+          "name": "link",
+          "source": "product_link"
+        },
+        {
+          "name": "image_link",
+          "source": "image_url"
+        },
+        {
+          "name": "additional_image_link",
+          "source": "gallery_urls",
+          "transform": [
+            [
+              "join",
+              ","
+            ]
+          ]
+        },
+        {
+          "name": "availability",
+          "source": "availability"
+        },
+        {
+          "name": "price",
+          "source": "regular_price",
+          "transform": [
+            [
+              "money"
+            ]
+          ]
+        },
+        {
+          "name": "sale_price",
+          "source": "sale_price",
+          "transform": [
+            [
+              "money"
+            ]
+          ]
+        },
+        {
+          "name": "brand",
+          "source": "brand",
+          "transform": [
+            [
+              "first"
+            ]
+          ]
+        },
+        {
+          "name": "gtin",
+          "source": "gtin"
+        },
+        {
+          "name": "mpn",
+          "source": "sku"
+        },
+        {
+          "name": "condition",
+          "source": "condition",
+          "transform": [
+            [
+              "default",
+              "new"
+            ]
+          ]
+        },
+        {
+          "name": "google_product_category",
+          "source": "shopping_cat"
+        },
+        {
+          "name": "item_group_id",
+          "source": "parent_id"
+        },
+        {
+          "name": "color",
+          "source": "variant_color"
+        },
+        {
+          "name": "size",
+          "source": "variant_size"
+        }
+      ],
+      "format": "csv"
+    }
+  },
+  "taxonomy": {
+    "label": "Google product taxonomy (top level)",
+    "note": "Perplexity and Gemini both read Google's taxonomy. ChatGPT accepts it too.",
+    "values": [
+      "Animals & Pet Supplies",
+      "Apparel & Accessories",
+      "Arts & Entertainment",
+      "Baby & Toddler",
+      "Business & Industrial",
+      "Cameras & Optics",
+      "Electronics",
+      "Food, Beverages & Tobacco",
+      "Furniture",
+      "Hardware",
+      "Health & Beauty",
+      "Home & Garden",
+      "Luggage & Bags",
+      "Mature",
+      "Media",
+      "Office Supplies",
+      "Religious & Ceremonial",
+      "Software",
+      "Sporting Goods",
+      "Toys & Games",
+      "Vehicles & Parts"
+    ]
+  },
+  "conditions": [
+    "new",
+    "refurbished",
+    "used"
+  ],
+  "transforms_allowed": [
+    "strip_html",
+    "collapse_space",
+    "trim",
+    "truncate",
+    "money",
+    "number",
+    "page_url",
+    "first",
+    "join",
+    "lower",
+    "default"
+  ]
+}
