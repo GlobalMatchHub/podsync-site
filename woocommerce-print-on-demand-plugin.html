@@ -62,16 +62,16 @@ cost of a quiet failure is a refunded order. Three questions settle it faster.</
 
 <h2>1. Which provider are you actually on?</h2>
 <p>Print-on-demand plugins are provider-specific. A Printful plugin does not talk to Printify,
-Gelato or anyone else — the APIs, product catalogues and variant models are different.
+Gelato or anyone else: the APIs, product catalogues and variant models are different.
 Pick your provider first; the plugin follows.</p>
 <p class="note">If you have not committed to a provider yet, do that before choosing a plugin.
 Switching providers later means redoing the integration, not swapping a setting.</p>
 
 <h2>2. Which of the three jobs do you need?</h2>
 <ul>
-  <li><b>Product sync</b> — designs into your catalogue, prices and stock current.</li>
-  <li><b>Order routing</b> — paid orders sent for fulfilment.</li>
-  <li><b>Live shipping rates</b> — real delivery costs quoted at checkout.</li>
+  <li><b>Product sync</b>: designs into your catalogue, prices and stock current.</li>
+  <li><b>Order routing</b>: paid orders sent for fulfilment.</li>
+  <li><b>Live shipping rates</b>: real delivery costs quoted at checkout.</li>
 </ul>
 <p>You do not need all three on day one. Sync plus manual ordering is a legitimate way to
 start, and it removes the two highest-risk pieces while you have almost no orders.</p>
@@ -82,7 +82,7 @@ start, and it removes the two highest-risk pieces while you have almost no order
   <li>Does a failed run appear anywhere you will actually look?</li>
   <li>Does a bad API response produce a half-written product, or a skip with a reason?</li>
   <li>Can it modify products it did not create?</li>
-  <li>If it quotes shipping, what happens when the API is slow — does the cart wait, or fall
+  <li>If it quotes shipping, what happens when the API is slow? Does the cart wait, or fall
       back to your own rate? A checkout that hangs costs more than a wrong rate.</li>
 </ul>
 
@@ -92,7 +92,7 @@ updated</b>, <b>tested up to</b>, and the <b>rating distribution</b> rather than
 A pile of one-star reviews all describing the same fault tells you more than the mean.</p>
 <p>For reference, on 18 August 2026 <a href="https://wordpress.org/plugins/printful-shipping-for-woocommerce/">Printful's own WooCommerce plugin</a> showed 50,000 active installs, 2.6 out of 5
 from 96 reviews, last updated 14 January 2026, tested to WordPress 6.9.7. Check the current
-figures yourself — that is the point of the exercise.</p>
+figures yourself; that is the point of the exercise.</p>
 
 <h2>Variants deserve a special look</h2>
 <p>If you sell one design in several sizes or colours, you need <b>variable products</b>. Some
@@ -101,12 +101,12 @@ fine on a demo store with one design and fall apart on a real catalogue.</p>
 
 <p class="note"><b>What ours does not do.</b> The free plugin copies simple products using the
 first variant, so it is not the answer if you sell one design in six sizes. It does not send
-orders to Printful and does not quote live shipping rates. It works with Printful only —
+orders to Printful and does not quote live shipping rates. It works with Printful only,
 not Printify or other providers.</p>
 <div class="disc">
 <h3>Disclosure</h3>
 <p>These notes are written by <b>sellerkit</b>. We build a Printful sync plugin for WooCommerce (below), which is why we know these failure modes.</p>
-<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a> — copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
+<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a>, which copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
 <p class="note">Everything above this box works whether or not you install anything.
 Where a workaround is enough, we say so.</p>
 </div>

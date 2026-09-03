@@ -62,7 +62,7 @@ painful to undo.</p>
 
 <h2>1. Settle currency before anything syncs</h2>
 <p>Your Printful store has a currency and so does WooCommerce. If they differ, every price
-that arrives has to be converted by something — and a plugin quietly guessing an exchange
+that arrives has to be converted by something, and a plugin quietly guessing an exchange
 rate is how shops end up selling below cost.</p>
 <p>Make them match before the first sync, or confirm exactly what your plugin does when they
 do not. "Refuses and tells you" is the safe behaviour.</p>
@@ -74,35 +74,35 @@ your own site and should only ever be sent to Printful.</p>
 asking for more trust than a sync tool needs.</p>
 
 <h2>3. First sync into drafts</h2>
-<p>Let the first run create products as <b>drafts</b>. You then check a handful — price,
-title, image, variant — and publish deliberately. If the first run instead publishes
+<p>Let the first run create products as <b>drafts</b>. You then check a handful (price,
+title, image, variant) and publish deliberately. If the first run instead publishes
 everything live, mistakes are public before you see them.</p>
 <p>If your plugin publishes immediately and cannot be told otherwise, run the first sync on a
 staging copy.</p>
 
 <h2>4. Check what the sync produced</h2>
 <ul>
-  <li><b>Prices</b> — against Printful, including currency.</li>
-  <li><b>Variants</b> — if you sell sizes or colours, confirm you got a variable product and
+  <li><b>Prices</b>: against Printful, including currency.</li>
+  <li><b>Variants</b>: if you sell sizes or colours, confirm you got a variable product and
       not just the first variant.</li>
-  <li><b>Duplicates</b> — the same design arriving twice usually means variants were flattened
+  <li><b>Duplicates</b>: the same design arriving twice usually means variants were flattened
       into separate products.</li>
-  <li><b>Images</b> — mockups do not always come across; you may be photographing by hand.</li>
+  <li><b>Images</b>: mockups do not always come across; you may be photographing by hand.</li>
 </ul>
 
 <h2>5. Decide how orders reach Printful</h2>
 <p>Product sync does not fulfil anything. Either add order routing, or place orders in
 Printful yourself as they come in. Doing it by hand is fine at low volume and a liability at
-high volume — decide which you are before launch, not after.</p>
+high volume, so decide which you are before launch, not after.</p>
 
 <p class="note"><b>What ours does not do.</b> The free plugin copies simple products using the
 first variant, so it is not the answer if you sell one design in six sizes. It does not send
-orders to Printful and does not quote live shipping rates. It works with Printful only —
+orders to Printful and does not quote live shipping rates. It works with Printful only,
 not Printify or other providers.</p>
 <div class="disc">
 <h3>Disclosure</h3>
 <p>These notes are written by <b>sellerkit</b>. We build a Printful sync plugin for WooCommerce (below), which is why we know these failure modes.</p>
-<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a> — copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
+<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a>, which copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
 <p class="note">Everything above this box works whether or not you install anything.
 Where a workaround is enough, we say so.</p>
 </div>

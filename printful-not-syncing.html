@@ -3,10 +3,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Printful not syncing to WooCommerce: what to check</title>
-<meta name="description" content="The four causes behind a Printful sync that silently stops — expired token, blocked outbound requests, a broken scheduler, and partial API responses — and how to tell them apart.">
+<meta name="description" content="The four causes behind a Printful sync that silently stops (expired token, blocked outbound requests, a broken scheduler, and partial API responses) and how to tell them apart.">
 <link rel="canonical" href="https://podsync.lifeinsight-365.com/printful-not-syncing">
 <meta property="og:title" content="Printful not syncing to WooCommerce: what to check">
-<meta property="og:description" content="The four causes behind a Printful sync that silently stops — expired token, blocked outbound requests, a broken scheduler, and partial API responses — and how to tell them apart.">
+<meta property="og:description" content="The four causes behind a Printful sync that silently stops (expired token, blocked outbound requests, a broken scheduler, and partial API responses) and how to tell them apart.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://podsync.lifeinsight-365.com/printful-not-syncing">
 <style>
@@ -88,7 +88,7 @@ This also fixes every other "why did my scheduled task not run" problem on the s
 
 <h2>4. Printful returned something incomplete</h2>
 <p>Occasionally the API returns an item missing a price, a variant, or a name. A plugin has two
-choices: write the partial product anyway, or skip it. Skipping is correct — but only if it
+choices: write the partial product anyway, or skip it. Skipping is correct, but only if it
 tells you, otherwise a product silently never appears.</p>
 <p>Symptom: most products update, one or two never do.</p>
 
@@ -100,12 +100,12 @@ work regardless of what you have installed.</p>
 
 <p class="note"><b>What ours does not do.</b> The free plugin copies simple products using the
 first variant, so it is not the answer if you sell one design in six sizes. It does not send
-orders to Printful and does not quote live shipping rates. It works with Printful only —
+orders to Printful and does not quote live shipping rates. It works with Printful only,
 not Printify or other providers.</p>
 <div class="disc">
 <h3>Disclosure</h3>
 <p>These notes are written by <b>sellerkit</b>. We build a Printful sync plugin for WooCommerce (below), which is why we know these failure modes.</p>
-<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a> — copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
+<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a>, which copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
 <p class="note">Everything above this box works whether or not you install anything.
 Where a workaround is enough, we say so.</p>
 </div>

@@ -63,7 +63,7 @@ th { font-weight: 650; background: color-mix(in srgb, var(--fg) 4%, transparent)
 <p>The cart asks Printful what shipping costs for this basket to this address, and shows the
 answer. Accurate, and it protects your margin on heavy or overseas parcels.</p>
 <p>The cost is that your checkout now depends on an external API responding quickly, every
-time. When it is slow, the customer waits on the last screen before paying — the most
+time. When it is slow, the customer waits on the last screen before paying, the most
 expensive place on your site to make someone wait.</p>
 <p>If you use live rates, the thing to verify is the failure path: a hard timeout, and a
 fallback to your own rate rather than an error. <b>The cart must never block.</b></p>
@@ -79,7 +79,7 @@ low.</p>
 <ol>
   <li>Take your ten best sellers and look up Printful's actual shipping cost to each region you
       sell to.</li>
-  <li>Set a zone rate at roughly the upper end of that range, not the average — the average
+  <li>Set a zone rate at roughly the upper end of that range, not the average: the average
       guarantees you lose on half your orders.</li>
   <li>Separate domestic and international zones. One global rate is always wrong for one of
       them.</li>
@@ -90,22 +90,22 @@ that the order covers its own delivery.</p>
 
 <h2>Which to choose</h2>
 <ul>
-  <li><b>Few products, one country</b> — flat rate. Live rates add a failure point for very
+  <li><b>Few products, one country</b>: flat rate. Live rates add a failure point for very
       little gain.</li>
-  <li><b>Wide catalogue with mixed weights, or international</b> — live rates start paying for
+  <li><b>Wide catalogue with mixed weights, or international</b>: live rates start paying for
       themselves, provided the timeout and fallback are right.</li>
-  <li><b>Not sure</b> — start flat, measure what shipping actually costs you over a month, then
+  <li><b>Not sure</b>: start flat, measure what shipping actually costs you over a month, then
       decide with numbers.</li>
 </ul>
 
 <p class="note"><b>What ours does not do.</b> The free plugin copies simple products using the
 first variant, so it is not the answer if you sell one design in six sizes. It does not send
-orders to Printful and does not quote live shipping rates. It works with Printful only —
+orders to Printful and does not quote live shipping rates. It works with Printful only,
 not Printify or other providers.</p>
 <div class="disc">
 <h3>Disclosure</h3>
 <p>These notes are written by <b>sellerkit</b>. We build a Printful sync plugin for WooCommerce (below), which is why we know these failure modes.</p>
-<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a> — copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
+<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a>, which copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
 <p class="note">Everything above this box works whether or not you install anything.
 Where a workaround is enough, we say so.</p>
 </div>

@@ -62,12 +62,12 @@ does all of them. Separate them first and the choice gets easy.</p>
 
 <h2>The three jobs</h2>
 <ol>
-  <li><b>Product sync</b> — Printful's catalogue of your designs is copied into WooCommerce as
+  <li><b>Product sync</b>: Printful's catalogue of your designs is copied into WooCommerce as
       products, with prices and availability kept current. One direction: Printful to your
       shop.</li>
-  <li><b>Order routing</b> — when a customer pays on your shop, the order is sent to Printful
+  <li><b>Order routing</b>: when a customer pays on your shop, the order is sent to Printful
       for printing and dispatch. The other direction, and the one that touches money.</li>
-  <li><b>Shipping rates</b> — the cart asks Printful what delivery costs before the customer
+  <li><b>Shipping rates</b>: the cart asks Printful what delivery costs before the customer
       pays. Live, in the checkout, on a timer.</li>
 </ol>
 <p>You can run a shop with only the first if you pass orders to Printful yourself. Many small
@@ -76,7 +76,7 @@ shops do exactly that for their first few months.</p>
 <h2>Why product sync is where things break</h2>
 <p>Printful's API changes, WordPress ships a major version, a security proxy in front of the
 site starts blocking outbound requests. Any of these stops a sync. The damaging part is
-rarely the failure itself — it is that an hourly background job fails quietly and nobody
+rarely the failure itself. It is that an hourly background job fails quietly and nobody
 notices until a customer orders something that is out of stock.</p>
 <p>So when you judge a sync plugin, the question is not what it syncs. It is <b>what it does
 when the sync fails</b>.</p>
@@ -98,17 +98,17 @@ when the sync fails</b>.</p>
 <p><a href="https://wordpress.org/plugins/printful-shipping-for-woocommerce/">Printful's own WooCommerce plugin</a> is the best known. As of 18 August 2026 the directory lists it at
 <b>50,000 active installs</b>, a <b>2.6 out of 5</b> rating from 96 reviews, a last update of
 <b>14 January 2026</b>, and compatibility tested to <b>WordPress 6.9.7</b>. Those are the
-directory's own figures — check them yourself before deciding, since they change.</p>
+directory's own figures, so check them yourself before deciding, since they change.</p>
 <p>Beyond that the field is thin, which is why so many shops end up moving orders by hand.</p>
 
 <p class="note"><b>What ours does not do.</b> The free plugin copies simple products using the
 first variant, so it is not the answer if you sell one design in six sizes. It does not send
-orders to Printful and does not quote live shipping rates. It works with Printful only —
+orders to Printful and does not quote live shipping rates. It works with Printful only,
 not Printify or other providers.</p>
 <div class="disc">
 <h3>Disclosure</h3>
 <p>These notes are written by <b>sellerkit</b>. We build a Printful sync plugin for WooCommerce (below), which is why we know these failure modes.</p>
-<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a> — copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
+<ul><li><a href="https://wordpress.org/plugins/podsync-for-woocommerce/">PODSync for WooCommerce</a>, which copies Printful products, prices and availability into WooCommerce, and tells you when a run fails</li></ul>
 <p class="note">Everything above this box works whether or not you install anything.
 Where a workaround is enough, we say so.</p>
 </div>
